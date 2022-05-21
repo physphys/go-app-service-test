@@ -1,0 +1,65 @@
+@startuml
+namespace dto {
+    class UserData << (S,Aquamarine) >> {
+        - id string
+        - name string
+
+    }
+}
+
+
+namespace model {
+    class User << (S,Aquamarine) >> {
+        - id UserID
+        - name UserName
+
+        + Name() UserName
+        + ID() UserID
+        + ChangeName(name string) error
+
+    }
+    class model.UserID << (T, #FF7700) >>  {
+    }
+    class model.UserName << (T, #FF7700) >>  {
+    }
+}
+
+
+namespace repository {
+    interface IUserRepository  {
+        + FindByID(id model.UserID) (model.User, error)
+        + FindByName(name model.UserName) (model.User, error)
+        + Create(user model.User) (model.User, error)
+        + Update(user model.User) (model.User, error)
+
+    }
+}
+
+
+namespace service {
+    class UserDomainService << (S,Aquamarine) >> {
+        + UserRepository repository.IUserRepository
+
+        + Exists(user model.User) bool
+
+    }
+}
+
+
+namespace usecase {
+    class UserAppService << (S,Aquamarine) >> {
+        - userRepository repository.IUserRepository
+        - userDomainService service.UserDomainService
+
+        + NewUser(userRepository repository.IUserRepository, userDomainService service.UserDomainService) (UserAppService, error)
+        + Register(name string) error
+        + Get(userID string) (dto.UserData, error)
+        + Update(userID string, name string) error
+
+    }
+}
+
+
+"__builtin__.string" #.. "model.UserID"
+"__builtin__.string" #.. "model.UserName"
+@enduml
