@@ -31,6 +31,7 @@ namespace repository {
         + FindByName(name model.UserName) (model.User, error)
         + Create(user model.User) (model.User, error)
         + Update(user model.User) (model.User, error)
+        + Delete(user model.User) error
 
     }
 }
@@ -47,18 +48,26 @@ namespace service {
 
 
 namespace usecase {
+    interface IUserAppService  {
+        + Register(name string) error
+        + Get(userID string) (dto.UserData, error)
+        + Update(userID string, name string) error
+        + Delete(userID string) error
+
+    }
     class UserAppService << (S,Aquamarine) >> {
         - userRepository repository.IUserRepository
         - userDomainService service.UserDomainService
 
-        + NewUser(userRepository repository.IUserRepository, userDomainService service.UserDomainService) (UserAppService, error)
         + Register(name string) error
         + Get(userID string) (dto.UserData, error)
         + Update(userID string, name string) error
+        + Delete(userID string) error
 
     }
 }
 
+"usecase.IUserAppService" <|-- "usecase.UserAppService"
 
 "__builtin__.string" #.. "model.UserID"
 "__builtin__.string" #.. "model.UserName"

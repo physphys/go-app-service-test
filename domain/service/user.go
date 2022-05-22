@@ -15,9 +15,6 @@ func NewUserDomainService(r repository.IUserRepository) (UserDomainService, erro
 
 func (us UserDomainService) Exists(user model.User) bool {
 	_, err := us.UserRepository.FindByName(user.Name())
-	if err != nil {
-		return false
-	}
 
-	return true
+	return err != nil
 }

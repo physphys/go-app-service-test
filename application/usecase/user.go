@@ -8,14 +8,20 @@ import (
 	"go-app-service-test/domain/service"
 )
 
+type IUserAppService interface {
+	Register(name string) error
+	Get(userID string) (dto.UserData, error)
+	Update(userID string, name string) error
+	Delete(userID string) error
+}
+
 type UserAppService struct {
 	userRepository    repository.IUserRepository
 	userDomainService service.UserDomainService
 }
 
-func (u UserAppService) NewUser(
-	userRepository repository.IUserRepository,
-	userDomainService service.UserDomainService,
+func NewUserAppService(
+	userRepository repository.IUserRepository, userDomainService service.UserDomainService,
 ) (UserAppService, error) {
 	return UserAppService{
 		userRepository:    userRepository,
@@ -63,6 +69,19 @@ func (u UserAppService) Update(userID string, name string) error {
 	}
 
 	if _, err := u.userRepository.Update(domainUser); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (u UserAppService) Delete(userID string) error {
+	domainUser, err := u.userRepository.FindByID(model.UserID(userID))
+	if err != nil {
+		return err
+	}
+
+	if err := u.userRepository.Delete(domainUser); err != nil {
 		return err
 	}
 
