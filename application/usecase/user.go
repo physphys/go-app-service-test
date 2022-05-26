@@ -49,7 +49,7 @@ func (u UserAppService) Register(name string) error {
 func (u UserAppService) Get(userID string) (dto.UserData, error) {
 	domainUser, err := u.userRepository.FindByID(model.UserID(userID))
 	if err != nil {
-		return dto.UserData{}, fmt.Errorf("not found domainUser for id: %s", userID)
+		return dto.UserData{}, err
 	}
 
 	return dto.NewUserData(domainUser), nil
