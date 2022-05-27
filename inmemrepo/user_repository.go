@@ -36,11 +36,11 @@ func (ur *UserRepository) Create(user model.User) (model.User, error) {
 }
 
 func (ur *UserRepository) Update(user model.User) (model.User, error) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
 func (ur *UserRepository) Delete(user model.User) error {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }

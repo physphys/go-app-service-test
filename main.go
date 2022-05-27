@@ -5,30 +5,32 @@ import (
 	"go-app-service-test/application/usecase"
 	"go-app-service-test/dicontainer"
 	"go-app-service-test/domain/service"
+	"go-app-service-test/handler"
 	"go-app-service-test/inmemrepo"
 	"log"
+	"net/http"
+	"time"
+
+	"github.com/gorilla/mux"
 )
 
 func main() {
 	fmt.Println("start")
-
 	container := initDIContainer()
-	get, err := container.Get(dicontainer.DefNameUserAppService)
-	if err != nil {
-		log.Fatal(err)
-	}
-	userAppService, ok := get.(usecase.IUserAppService)
-	if !ok {
-		log.Fatal(err)
-	}
-	_, err = userAppService.Get("tekitou")
-	if err != nil {
-		fmt.Println(err)
 
-		return
+	handlerConf := handler.Config{DiContainer: container}
+	r := mux.NewRouter()
+	r.HandleFunc("/users/{id}", handlerConf.GetUserByIDHandler).Methods("GET")
+
+	const serverTimeout = 15 * time.Second
+	srv := &http.Server{
+		Handler:      r,
+		Addr:         "127.0.0.1:8000",
+		WriteTimeout: serverTimeout,
+		ReadTimeout:  serverTimeout,
 	}
 
-	fmt.Println("end")
+	log.Fatal(srv.ListenAndServe())
 }
 
 func initDIContainer() *dicontainer.Container {
