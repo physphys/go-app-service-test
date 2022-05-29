@@ -6,11 +6,11 @@ import (
 )
 
 type UserRepository struct {
-	users []model.User
+	Users []model.User
 }
 
 func (ur UserRepository) FindByID(id model.UserID) (model.User, error) {
-	for _, user := range ur.users {
+	for _, user := range ur.Users {
 		if user.ID() == id {
 			return user, nil
 		}
@@ -20,7 +20,7 @@ func (ur UserRepository) FindByID(id model.UserID) (model.User, error) {
 }
 
 func (ur UserRepository) FindByName(name model.UserName) (model.User, error) {
-	for _, user := range ur.users {
+	for _, user := range ur.Users {
 		if user.Name() == name {
 			return user, nil
 		}
@@ -30,7 +30,7 @@ func (ur UserRepository) FindByName(name model.UserName) (model.User, error) {
 }
 
 func (ur *UserRepository) Create(user model.User) (model.User, error) {
-	ur.users = append(ur.users, user)
+	ur.Users = append(ur.Users, user)
 
 	return user, nil
 }

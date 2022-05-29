@@ -12,8 +12,8 @@ type Config struct {
 	DiContainer *dicontainer.Container
 }
 
-func (s Config) GetUserByIDHandler(_ http.ResponseWriter, r *http.Request) {
-	get, err := s.DiContainer.Get(dicontainer.DefNameUserAppService)
+func (conf Config) GetUserByIDHandler(_ http.ResponseWriter, r *http.Request) {
+	get, err := conf.DiContainer.Get(dicontainer.DefNameUserAppService)
 	if err != nil {
 		fmt.Println(err)
 
